@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import json
 import random
+import re
 import subprocess
 from pathlib import Path
 
@@ -129,7 +130,15 @@ def build_sfx_bed(layers: list[dict], library: dict, sfx_dir: Path, out: Path,
     inputs, filt = [], []
     for i, (layer, f) in enumerate(present):
         inputs += ["-stream_loop", "-1", "-i", str(f)]
-        filt.append(f"[{i}:a]volume={layer.get('gain', 1.0)}[a{i}]")
+        # Normalize each ELEMENT to a common loudness first (-20 LUFS, TP -3) so the
+        # config gains mean what they say regardless of how the source file was
+        # mastered (Freesound files vary wildly: quiet wind beds vs near-full-scale
+        # crackle transients). Without this the mix lands ~30 dB crest and the final
+        # loudness stage has to crush it. aformat pins rate/layout (loudnorm
+        # internally upsamples to 192k, which breaks graph negotiation otherwise).
+        filt.append(f"[{i}:a]loudnorm=I=-20:TP=-3:LRA=8,"
+                    f"aformat=sample_rates=48000:channel_layouts=stereo,"
+                    f"volume={layer.get('gain', 1.0)}[a{i}]")
     mix = "".join(f"[a{i}]" for i in range(len(present)))
     fc = (";".join(filt) +
           f";{mix}amix=inputs={len(present)}:normalize=0:duration=shortest,"
@@ -155,30 +164,112 @@ def merge_audio_layers(cfg: dict, scene: dict) -> list[dict]:
     return layers
 
 
+def _measure_loudness(src: Path, lufs: float, tp: float, lra: float) -> dict:
+    """loudnorm analysis pass: returns the measured input_* values as a dict.
+    (Single-pass loudnorm guesses; feeding these back in pass 2 makes it exact.)"""
+    proc = subprocess.run(
+        ["ffmpeg", "-hide_banner", "-nostats", "-i", str(src),
+         "-af", f"loudnorm=I={lufs}:TP={tp}:LRA={lra}:print_format=json",
+         "-f", "null", "-"], capture_output=True, text=True)
+    m = re.search(r"\{[\s\S]*\}", proc.stderr[-2500:])
+    if not m:
+        raise RuntimeError(f"loudnorm measurement failed for {src}")
+    return json.loads(m.group(0))
+
+
 def make_seamless_audio(bed: Path, out: Path, xfade: float, lufs: float,
                         tp: float = -1.5, lra: float = 6) -> Path:
-    """Seamless audio loop unit + loudness normalization. Wraps the bed's end into
-    its start so a stream_loop has no audible seam: take tail=bed[X:D] and head=
-    bed[0:X], acrossfade(tail, head) -> unit that starts AND ends on the sample @
-    time X. loudnorm pins output loudness so no volume spike wakes a sleeper.
+    """Seamless audio loop unit + ACCURATE loudness normalization. Wraps the bed's
+    end into its start so a stream_loop has no audible seam (see make_seamless_video
+    for the technique), then hits the LUFS target with a measured TWO-PASS loudnorm.
+
+    Why two passes + pre-gain (2026-07 fix): the SFX bed is mixed at sleep-safe
+    layer gains, so it lands VERY quiet (≈ -30 LUFS). Single-pass loudnorm lifting
+    +14 dB both undershoots the target and lets true peaks through. Fix: (a) if the
+    gap to target is large, pre-gain with a true-peak limiter to restore headroom;
+    (b) run loudnorm with measured_* values + linear=true so the result is exact
+    (±0.5 LU) with dynamics intact and TP hard-capped.
 
     NOTE: acrossfade starves if both inputs are atrim branches of the same source,
     so head/tail are extracted to temp WAVs first (crossfading two files is robust)."""
     d = _probe_duration(bed)
-    # I = consistent loudness target; TP = hard true-peak cap (no startling spikes);
-    # low LRA = tight dynamics so nothing swells louder than the rest.
-    norm = f"loudnorm=I={lufs}:TP={tp}:LRA={lra}"
+
+    # --- 1) build the seamless unit (uncompressed; normalize AFTER the fade) ---
+    unit = out.with_name("_aunit.wav")
     if xfade <= 0 or d <= 2 * xfade + 0.1:
-        _run(["ffmpeg", "-y", "-i", str(bed), "-af", norm,
-              "-c:a", "aac", "-b:a", "192k", str(out)])
-        return out
-    head = out.with_name("_ahead.wav")
-    tail = out.with_name("_atail.wav")
-    _run(["ffmpeg", "-y", "-i", str(bed), "-t", str(xfade), "-c:a", "pcm_s16le", str(head)])
-    _run(["ffmpeg", "-y", "-ss", str(xfade), "-i", str(bed), "-c:a", "pcm_s16le", str(tail)])
-    _run(["ffmpeg", "-y", "-i", str(tail), "-i", str(head),
-          "-filter_complex", f"[0:a][1:a]acrossfade=d={xfade}:c1=tri:c2=tri[ax];[ax]{norm}[a]",
-          "-map", "[a]", "-c:a", "aac", "-b:a", "192k", str(out)])
+        _run(["ffmpeg", "-y", "-i", str(bed), "-c:a", "pcm_s16le", str(unit)])
+    else:
+        head = out.with_name("_ahead.wav")
+        tail = out.with_name("_atail.wav")
+        _run(["ffmpeg", "-y", "-i", str(bed), "-t", str(xfade), "-c:a", "pcm_s16le", str(head)])
+        _run(["ffmpeg", "-y", "-ss", str(xfade), "-i", str(bed), "-c:a", "pcm_s16le", str(tail)])
+        _run(["ffmpeg", "-y", "-i", str(tail), "-i", str(head),
+              "-filter_complex", f"[0:a][1:a]acrossfade=d={xfade}:c1=tri:c2=tri[a]",
+              "-map", "[a]", "-c:a", "pcm_s16le", str(unit)])
+
+    # --- 2) condition: tame crest just enough that a LINEAR lift fits the TP cap ---
+    # The bed mixes at sleep-safe layer gains -> very quiet loudness (~ -30 LUFS) but
+    # near-full-scale crackle transients. Lifting to target would smash the TP ceiling,
+    # so: compress ONLY the top transients (peak mode, adaptive threshold), apply the
+    # lift, and catch strays with an OVERSAMPLED limiter (192k ~= true-peak-aware).
+    # For sleep content this transient taming is a feature: no crackle may startle.
+    m = _measure_loudness(unit, lufs, tp, lra)
+    staged = unit
+    needed = lufs - float(m["input_i"])          # dB of loudness lift required
+    if needed > 1.0:
+        headroom = (tp - 1.0) - float(m["input_tp"])   # safe gain before the cap
+        excess = needed - headroom                     # transient dB to tame
+        chain = []
+        if excess > 0:
+            # Backstop only (elements are pre-normalized in build_sfx_bed, so the
+            # crest should already be sane): compress transients sitting >14 dB
+            # above program loudness, gently.
+            thr = 10 ** ((float(m["input_i"]) + 14.0) / 20)
+            chain.append(f"acompressor=threshold={max(min(thr, 0.9), 0.001):.6f}"
+                         f":ratio=4:attack=3:release=200:knee=6")
+        ceiling = 10 ** ((tp - 0.5) / 20)
+        chain += [f"volume={needed - 0.5:.2f}dB",
+                  "aresample=192000",
+                  f"alimiter=limit={ceiling:.6f}:attack=2:release=120:level=false",
+                  "aresample=48000"]
+        pre = out.with_name("_apre.wav")
+        _run(["ffmpeg", "-y", "-i", str(unit), "-af", ",".join(chain),
+              "-c:a", "pcm_s16le", str(pre)])
+        staged = pre
+        m = _measure_loudness(staged, lufs, tp, lra)
+
+    # --- 3) exact loudnorm: measured two-pass, verify-and-correct (max 3 passes) ---
+    # linear=true is transparent but clamps gain at the TP ceiling, which can leave
+    # the result short of target; each extra pass closes the remaining gap on the
+    # already-TP-capped signal, so this converges in 1-2 passes in practice.
+    cur = staged
+    for i in range(3):
+        m = _measure_loudness(cur, lufs, tp, lra)
+        if abs(float(m["input_i"]) - lufs) <= 0.7 and float(m["input_tp"]) <= tp + 0.1:
+            break
+        # Aim 0.7 dB under the TP cap inside the pass: loudnorm limits at its
+        # internal 192k rate, and the resample back to 48k overshoots ~0.5-1 dB.
+        norm = (f"loudnorm=I={lufs}:TP={tp - 0.7}:LRA={lra}:linear=true"
+                f":measured_I={m['input_i']}:measured_TP={min(float(m['input_tp']), 0.0)}"
+                f":measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}"
+                f":offset={m['target_offset']}")
+        nxt = out.with_name(f"_anorm{i}.wav")
+        _run(["ffmpeg", "-y", "-i", str(cur), "-af", norm, "-ar", "48000",
+              "-c:a", "pcm_s16le", str(nxt)])
+        cur = nxt
+    # --- 4) encode with codec headroom, verify the ENCODED file ---
+    # AAC reconstruction overshoots true peak on crackle-like transients (+1..2 dB),
+    # so limit the WAV ~1.5 dB below the cap first, then check the actual .m4a;
+    # if the codec still overshot, tighten the ceiling 1 dB and re-encode once.
+    for margin in (1.5, 2.5):
+        ceiling = 10 ** ((tp - margin) / 20)
+        lim = out.with_name("_alim.wav")
+        _run(["ffmpeg", "-y", "-i", str(cur), "-af",
+              f"aresample=192000,alimiter=limit={ceiling:.6f}:attack=2:release=120:level=false",
+              "-ar", "48000", "-c:a", "pcm_s16le", str(lim)])
+        _run(["ffmpeg", "-y", "-i", str(lim), "-c:a", "aac", "-b:a", "256k", str(out)])
+        if float(_measure_loudness(out, lufs, tp, lra)["input_tp"]) <= tp + 0.1:
+            break
     return out
 
 
