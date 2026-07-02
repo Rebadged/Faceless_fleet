@@ -47,7 +47,11 @@ def build_jobs(cfg: dict, scene: dict, tokens: dict, location_prompt: str = "") 
     still_prompt = _fmt(scene["still_prompt"], tokens)
     if location_prompt:                              # depict the rotated named place (descriptive form)
         still_prompt += f", set in {location_prompt}"
-    still_prompt += " -- " + identity["negative"]
+    # NOTE (2026-07-01, validated): soul_2 has NO negative-prompt channel. Appending
+    # identity.negative inline ("no tree trunks...") puts those very tokens INTO the
+    # image - both test renders grew foreground trunks. Scene prompts now carry
+    # positive composition guards instead; identity.negative remains the review-gate
+    # checklist (review.py), not prompt text.
     motion_prompt = _fmt(scene["motion_prompt"], tokens)
     jobs = [
         GenJob(
