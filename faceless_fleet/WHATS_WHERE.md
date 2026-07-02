@@ -16,6 +16,21 @@ branch **`main`**, with the `faceless_fleet/` package at the repo root (so comma
 
 ## This session — what changed (newest first)
 
+### 2026-07-01 (Instance 2 — channels 2 & 3)
+- **Campfire/Tent branding regenerated:** all four 2026-06-26 assets were defective on
+  zoom inspection (both banners: baked-in YouTube player UI / play-button logo, from
+  "YouTube banner" phrasing + inline "no X" lists; both avatars: scene-inside-a-circle
+  vignette, tent avatar also had gibberish canvas text). Regenerated with positive-only
+  prompts per the validated 2026-07-01 lessons. **Final job IDs** — Campfire avatar
+  `559ef24e-70e3-4b7c-a06d-d09f653e1bc0`, Campfire banner `7f473e86-db00-4353-8015-2fa05b400495`,
+  Tent avatar `a8c5eafc-8845-4e42-8fe0-65b2966d0892`, Tent banner
+  `90514c64-a9e0-4b41-9c7a-0803b3d49c48`. ~1.4 cr total (14 stills, no video). Finals
+  downloaded to CK's machine (banners upscaled to 2560×1440); alternates kept in the
+  Higgsfield library.
+- **Channels:** creation pack (names, handles, verbatim bios, step list) handed to CK —
+  he creates the Brand Accounts; handles + `youtube_channel_id` will be written back into
+  `campfire.yaml` / `camping_tent.yaml` once created.
+
 ### 2026-07-01 (Fable session)
 - **Fall launch pivot (CK):** start with autumn/rain, not winter — richer audio palette
   (rain + distant thunder + fire crackle; wind was too dominant). New hero scene

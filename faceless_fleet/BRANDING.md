@@ -21,10 +21,17 @@ ffmpeg on the VPS, or Canva). Ask and I'll wire it; otherwise scenic-only is cle
 ## Generated so far
 
 - **Cabin Comforts** — avatar + banner done (earlier this build).
-- **Campfire Comforts** — avatar + banner generated (review).
-- **Tent Comforts** — avatar + banner generated (review).
+- **Campfire Comforts** — FINAL (2026-07-01): avatar `559ef24e-70e3-4b7c-a06d-d09f653e1bc0`,
+  banner `7f473e86-db00-4353-8015-2fa05b400495`.
+- **Tent Comforts** — FINAL (2026-07-01): avatar `a8c5eafc-8845-4e42-8fe0-65b2966d0892`,
+  banner `90514c64-a9e0-4b41-9c7a-0803b3d49c48`.
 
-(All live in your Higgsfield library; download the ones you pick.)
+(All live in the Higgsfield library. The 2026-06-26 Campfire/Tent batch is superseded —
+all four had baked-in UI/watermark/text defects. Prompt rules that produced clean sets:
+positive-only wording (no "no X" lists — soul_2 injects them), never say "YouTube
+banner"/"channel avatar icon" (renders player chrome / a circle vignette) — say "a
+sweeping wide cinematic view" / "seen up close filling the frame", and put the subject
+"at the vertical center of the frame" so the banner survives the desktop crop.)
 
 ## Uploading (one-time per channel, ~2 min)
 
