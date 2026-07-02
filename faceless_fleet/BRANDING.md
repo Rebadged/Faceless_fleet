@@ -46,6 +46,14 @@ channel and you drop them into Studio when you create it.
 
 ## Thumbnail & brand system (distilled from research/BRANDING_PLAYBOOK.md)
 
+**"Handcrafted" framing (CK, 2026-07-01).** The stylized painterly look is OWNED, not
+hidden: bios + video descriptions say every ambience is "handcrafted — scenes painted in
+our signature storybook style, soundscapes mixed by hand." This turns "looks a bit fake"
+into the brand (deliberate art direction), reinforces the inauthentic-content defense
+(distinctive, curated, not templated realism), and stays honest: scenes ARE hand-curated
+and art-directed, beds ARE hand-tuned mixes. Don't claim scenes are literally hand-painted
+beyond this brand-voice phrasing; never explicitly deny AI involvement.
+
 The full playbook is in `research/BRANDING_PLAYBOOK.md`. Here are the rules that
 actually apply to our 3 focal-point Comforts channels — follow these when making
 avatars, banners, and thumbnails.

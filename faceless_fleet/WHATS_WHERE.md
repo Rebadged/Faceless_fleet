@@ -16,6 +16,26 @@ branch **`main`**, with the `faceless_fleet/` package at the repo root (so comma
 
 ## This session — what changed (newest first)
 
+### 2026-07-01 (Fable session)
+- **Fall launch pivot (CK):** start with autumn/rain, not winter — richer audio palette
+  (rain + distant thunder + fire crackle; wind was too dominant). New hero scene
+  `rainy_cabin_autumn` in `rain_cabin.yaml`; validated still + 5s clip generated; 4-min
+  sample approved by CK.
+- **Loudness chain rebuilt** (`assemble.py`): per-element loudnorm before mixing,
+  adaptive transient conditioning, measured two-pass loudnorm (verify-and-correct loop),
+  oversampled limiting + codec-headroom AAC encode. Verified: −16.6 LUFS / TP −3.0 /
+  LRA 1.4 (was −21.7 with true-peak clipping). Cabin `loudness_lufs: -16` (CK decision).
+- **Prompt lessons (validated on renders):** soul_2 has NO negative channel — inline
+  "no X" lists inject X (foreground trunks); "like a fire dancing inside" renders literal
+  flames; timid motion prompts ("gentle/subtle") make Kling near-static (0.0% pixel
+  change). Scene prompts now positive-only with explicit multi-element motion;
+  `generate.py` no longer appends `identity.negative` to prompts.
+- **Brand framing (CK):** the painterly look is owned as "handcrafted" in bios + video
+  descriptions (all 3 channels + BRANDING.md policy note). Live @CabinComforts bio updated.
+- **State:** Cabin Comforts channel is live + branded (`UCbayo4s0nrP0-n2iagNDBQw`);
+  SFX fetched (5 cabin elements); OAuth client creds in CK's local `CK.env` (no refresh
+  token yet); next: 8h render → OAuth → first scheduled upload.
+
 **Decisions baked in** (`e074c30`):
 - **5s master clips** (`clip_seconds: 5`, `est_credits_per_clip: 9`) — video isn't the star; halves credit cost, loops just as invisibly.
 - **Camera essentially locked** (barely-perceptible drift max) across all 3 channels; motion lives in the scenery.

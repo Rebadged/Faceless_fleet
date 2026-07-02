@@ -11,7 +11,7 @@ channel:
   youtube_handle: "@CampfireComforts"
   youtube_channel_id: ""
   oauth_secret_env: YT_CAMPFIRE_REFRESH_TOKEN
-  bio: "Cozy campfire ambience for sleep, study, and relaxation. Crackling fires under summer stars with crickets and frogs, gentle rain on the flames in autumn, and quiet snowy nights deep in the forest. Get comfortable and let the fire carry you off. New ambiences every week."
+  bio: "Cozy campfire ambience for sleep, study, and relaxation. Crackling fires under summer stars with crickets and frogs, gentle rain on the flames in autumn, and quiet snowy nights deep in the forest. Get comfortable and let the fire carry you off. Every ambience is handcrafted — scenes painted in our signature storybook style, soundscapes mixed by hand for deep, uninterrupted rest. New ambiences every week."
   language: en
   audience_geo_hint: "US/UK/CA/AU"
 
@@ -100,6 +100,8 @@ metadata:
     - "{keyword} for Sleep & Relaxation | {location} | {dur} (Cinematic)"
   description: |
     Welcome to Campfire Comforts. 🔥✨ A crackling campfire under the trees — for deep sleep, studying, reading, or relaxing.
+
+    Every Campfire Comforts ambience is handcrafted: the scene painted in our signature storybook style, the soundscape mixed by hand so nothing ever startles you awake.
     No interruptions while you drift off. New ambiences every week.
 
     ▶ Playlists: Summer Campfire Nights · Rainy Campfire Nights · Snowy Campfire Nights
