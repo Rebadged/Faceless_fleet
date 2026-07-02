@@ -24,7 +24,7 @@ from pathlib import Path
 
 from .config import ROOT, load_channel, output_dirs
 
-HOURS = {"1h": 3600, "3h": 10800, "8h": 28800}
+HOURS = {"1h": 3600, "3h": 10800, "8h": 28800, "12h": 43200}
 
 
 def _run(cmd: list[str]) -> None:

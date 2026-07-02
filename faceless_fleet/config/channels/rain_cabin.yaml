@@ -59,6 +59,29 @@ scene_pool:
     # Motion must be EXPLICIT and multi-element or Kling under-animates (validated:
     # "gentle/subtle only-motion-is-X" wording produced a near-static clip).
     motion_prompt: "heavy rain falling in clearly visible streaks across the entire frame, raindrops striking the wet ground and making the warm reflections ripple and shimmer continuously, the amber window light flickering warmly and casting moving glow on the wet leaves, chimney smoke drifting slowly upward and dispersing, autumn leaves on the trees trembling lightly under the rain, {motion_principle}, no people"
+  - id: autumn_porch_storm              # validated 2026-07-02 (sample V1)
+    weather: storm
+    keyword: "Rain on Porch & Thunder"
+    audio_hint: "rain on porch roof + rolling thunder, NO wind"
+    audio_layers: [{el: rain_heavy, gain: 1.0}, {el: thunder, gain: 0.7}]
+    still_prompt: "covered wooden cabin porch during a heavy night thunderstorm in autumn, rain pouring off the roof eaves in even sheets, a single hanging lantern glowing warm amber, wet golden fallen leaves scattered on the porch boards, misty dark pine forest beyond the railing, deep blue-grey stormy night, {film_look}"
+    motion_prompt: "heavy rain pouring off the roof eaves in visible sheets beyond the railing, rain streaking through the air across the misty forest, the hanging lantern glowing warmly and swaying very gently, rainwater trickling and dripping from the eaves, wet golden leaves glistening as the light shifts, {motion_principle}, no people"
+  - id: lakeside_autumn                 # validated 2026-07-02 (sample V4)
+    weather: rain
+    keyword: "Lakeside Rain"
+    audio_hint: "gentle rain + faint fireplace, NO wind"
+    audio_layers: [{el: rain_light, gain: 1.0}, {el: fireplace, gain: 0.3}]
+    # NOTE: serene water scenes NEED "heavy rain"-energy motion wording or Kling
+    # renders them static (two failed gentle-worded attempts before this one).
+    still_prompt: "a lone cozy log cabin on the shore of a calm dark lake on a rainy autumn night, the water between the camera and the cabin smooth and open, a dense autumn forest of tall evergreens mixed with golden and deep-red maples rising behind the cabin, gentle rain falling softly, the cabin windows glowing with soft warm amber light from deep inside, the warm glow stretching in long shimmering reflections across the lake surface, low mist drifting over the far shore, deep blue-grey night, serene and sheltered, {film_look}"
+    motion_prompt: "heavy rain pouring down in thick clearly visible streaks over the entire scene, the lake surface alive with overlapping raindrop rings and splashes everywhere, the warm window reflections breaking apart and reforming on the water, mist drifting along the far shore, {motion_principle}, no people"
+  - id: highlands_rain                  # validated 2026-07-02 (sample V5)
+    weather: rain
+    keyword: "Heavy Rain"
+    audio_hint: "pure heavy rain, nothing else"
+    audio_layers: [{el: rain_heavy, gain: 1.0}]
+    still_prompt: "a sturdy old stone cottage standing alone on open moorland in the Scottish Highlands during a night rainstorm, heavy rain sweeping across the dark heather hills in visible sheets, the cottage windows glowing warm amber from deep inside, warm light spilling onto the wet stone path, mist rolling low over the slopes, dark crags rising far behind, the ground between the camera and the cottage open and empty, deep blue-grey stormy night, {film_look}"
+    motion_prompt: "heavy rain sweeping across the moorland in visible wind-blown sheets, rain streaking through the air across the whole frame, mist rolling slowly over the dark hills, the warm window light flickering gently, rainwater glistening and running on the wet stone path, {motion_principle}, no people"
   - id: cabin_window_glow_rain          # exterior rain variant
     weather: rain
     keyword: "Heavy Rain & Distant Thunder"
@@ -139,10 +162,11 @@ audio:
     thunder: thunder_distant.wav
     fireplace: fireplace.wav
     wind: wind_winter.wav
+    crickets: crickets.wav
 
 longform:
   # Length ladder — round hours ARE the search convention here ("8 hours rain").
-  variants: ["1h", "3h", "8h"]
+  variants: ["1h", "3h", "8h", "12h"]  # CK: 1h/8h/12h ladder
   seamless_loop: true                 # crossfade the short clip end->start (invisible seam)
 
 metadata:
