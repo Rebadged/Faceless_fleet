@@ -31,6 +31,17 @@ branch **`main`**, with the `faceless_fleet/` package at the repo root (so comma
   he creates the Brand Accounts; handles + `youtube_channel_id` will be written back into
   `campfire.yaml` / `camping_tent.yaml` once created.
 
+### 2026-07-03 (Fable session — look lock)
+- **The Look locked by CK** after a reference-driven lookdev round (his 6 refs + 8 generated
+  stills + 8 clips): fire-light-only, casual fires, opaque tents, wind-alive motion,
+  wilderness-only audio. Rules in `BRANDING.md` §The Look; 6 approved scenes added across
+  all three channel configs with validated prompts + Higgsfield job IDs.
+- Sample verdicts: Fall 4-min sample approved earlier; of the 5-video batch CK kept the
+  original Fall one and retired the rest as look-drift. Long renders wait until the first
+  library is rebuilt on the locked look.
+- Next: audio sourcing pass (wilderness-only, per-element listening previews), then rebuild
+  the clip library on approved scenes, then 1h/8h/12h renders -> OAuth -> first upload.
+
 ### 2026-07-01 (Fable session)
 - **Fall launch pivot (CK):** start with autumn/rain, not winter — richer audio palette
   (rain + distant thunder + fire crackle; wind was too dominant). New hero scene

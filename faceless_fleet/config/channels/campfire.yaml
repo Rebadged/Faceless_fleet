@@ -28,7 +28,35 @@ season_audio:
   fall:   [{el: rain_light, gain: 0.6}, {el: wind, gain: 0.3}, {el: thunder, gain: 0.4}]
   winter: [{el: wind, gain: 0.5}]
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# LOOK RULES — LOCKED BY CK 2026-07-03 (validated on renders, see BRANDING.md §Look)
+#  LIGHT = FIRE, ALWAYS: doors closed in weather; windows/tent fabric show only a
+#    dim warm FLICKERING fire glow (visible fire shadows through glass, or a dancing
+#    warm patch cast on the ground). No steady lamps, no glaring bright windows,
+#    no see-through tent fabric (solid rainfly, diffuse glow only, nothing inside visible).
+#  FIRES BURN CASUAL: low lazy flames over embers, never a raging bonfire.
+#  WIND LIVES HERE: at least one foreground element visibly moves (foliage brushing,
+#    grass rippling, ferns nodding, rain streaks); prompts must say it EXPLICITLY
+#    (timid wording renders static).
+#  MOODS: tent = you're camping; cabin = shelter in the wilderness; fire = a warm
+#    bubble in the open dark.
+# ══════════════════════════════════════════════════════════════════════════════
 scene_pool:
+  - id: fire_tallpines                  # APPROVED LOOK REF (CK 2026-07-03: "that fire one is great") still 9921edb9 / clip f49a70a7
+    weather: fire
+    keyword: "Campfire in the Forest"
+    audio_hint: "low crackling fire + night forest ambience, exposed-in-the-open feel"
+    audio_layers: [{el: fireplace, gain: 1.0}, {el: crickets, gain: 0.3}]
+    still_prompt: "a small modest campfire burning low and calm in a clearing among very tall dark pine trees at dusk, lazy small flames over a bed of glowing orange embers, the fire small in the frame near the bottom, the towering trunks rising high above and fading into the darkening sky, the gentle firelight reaching only a few meters before the forest swallows it, low branches and undergrowth at the clearing edge stirring slightly in the wind, the feeling of being a small warm point in a vast dark forest, {film_look}"
+    motion_prompt: "the small campfire burning low and lazy, modest flames wavering and licking slowly over the glowing embers, the ember bed pulsing softly, faint warm light flickering on the surrounding grass, thin smoke drifting up, the undergrowth stirring slightly in a light breeze, the tall pine trunks completely still, {motion_principle}, no people"
+  - id: fire_close                      # APPROVED LOOK REF (CK 2026-07-03) still be9ccf59 / clip 0fac62c5
+    weather: fire
+    keyword: "Crackling Campfire"
+    audio_hint: "close crackling fire, intimate"
+    audio_layers: [{el: fireplace, gain: 1.0}]
+    still_prompt: "a close campfire of crossed logs burning with lively flames and tiny sparks drifting upward, glowing embers underneath, set on rocky ground in a forest at deep dusk, the surrounding pines soft and out of focus in cool blue shadow behind the warm fire, thin smoke curling up, leaves at the edge of the firelight trembling in a light wind, intimate and mesmerizing, {film_look}"
+    motion_prompt: "the campfire flames curling and dancing over the crossed logs, tiny orange sparks drifting and swirling upward, the embers underneath glowing and breathing, thin smoke curling up and dispersing, the out-of-focus leaves behind trembling slightly in a light wind, {motion_principle}, no people"
   - id: campfire_clearing             # summer night
     weather: clear
     keyword: "Crackling Campfire & Summer Night"

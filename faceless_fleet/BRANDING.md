@@ -51,6 +51,33 @@ channel and you drop them into Studio when you create it.
 
 ---
 
+## The Look — locked by CK (2026-07-03, validated on renders)
+
+Every scene across all three channels obeys these. They ARE the brand:
+
+1. **Light = fire, always.** Doors closed in any weather. Windows show a dim warm
+   flickering fire glow only: fire shadows visible through the glass, or a restless warm
+   patch cast on the ground outside. No steady lamps, no glaring bright windows, no
+   rigid lighting. Tents: solid opaque rainfly, a soft diffuse warmth through the fabric,
+   nothing inside visible (no lantern hot-spots, no silhouettes).
+2. **Fires burn casual.** Low lazy flames over a glowing ember bed, the fire an hour in,
+   never a raging fresh bonfire.
+3. **Wind lives here.** At least one foreground element visibly moves: grass rippling in
+   waves, ferns nodding under raindrops, leaves trembling. Not everything moves, but
+   what moves must be NOTICEABLE. Prompts must state motion explicitly and
+   multi-element ("heavy rain in clearly visible streaks... ferns swaying...") because
+   timid wording renders near-static (measured: 0.0% pixel change).
+4. **Moods.** Tent = you are camping. Cabin = a place to sleep in the wilderness.
+   Fire = a warm bubble, slightly exposed in the open dark.
+5. **Audio comes from the wilderness.** Rain lands on canopy, tarp, or ground — never
+   drains, gutters, or pavement. Sources must sound like the outdoors; distant rolling
+   thunder yes, city rumble no. (Enforced at SFX sourcing time.)
+
+Approved look references (Higgsfield job IDs, all in the channel configs as scenes):
+cabin: 8d197142 (night forest) + 6c363ec5 (meadow dusk) · campfire: 9921edb9
+(tall pines, CK favourite) + be9ccf59 (close) · tent: b2d64f0f (rain forest) +
+887dd4dd (stars ridge, opaque-fabric reference).
+
 ## Thumbnail & brand system (distilled from research/BRANDING_PLAYBOOK.md)
 
 **"Handcrafted" framing (CK, 2026-07-01).** The stylized painterly look is OWNED, not

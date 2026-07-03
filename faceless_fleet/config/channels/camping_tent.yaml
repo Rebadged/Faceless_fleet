@@ -27,7 +27,35 @@ season_audio:
   fall:   [{el: rain_light, gain: 0.4}, {el: wind, gain: 0.3}, {el: thunder, gain: 0.4}]
   winter: [{el: wind, gain: 0.5}]
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# LOOK RULES — LOCKED BY CK 2026-07-03 (validated on renders, see BRANDING.md §Look)
+#  LIGHT = FIRE, ALWAYS: doors closed in weather; windows/tent fabric show only a
+#    dim warm FLICKERING fire glow (visible fire shadows through glass, or a dancing
+#    warm patch cast on the ground). No steady lamps, no glaring bright windows,
+#    no see-through tent fabric (solid rainfly, diffuse glow only, nothing inside visible).
+#  FIRES BURN CASUAL: low lazy flames over embers, never a raging bonfire.
+#  WIND LIVES HERE: at least one foreground element visibly moves (foliage brushing,
+#    grass rippling, ferns nodding, rain streaks); prompts must say it EXPLICITLY
+#    (timid wording renders static).
+#  MOODS: tent = you're camping; cabin = shelter in the wilderness; fire = a warm
+#    bubble in the open dark.
+# ══════════════════════════════════════════════════════════════════════════════
 scene_pool:
+  - id: tent_rain_forest                # APPROVED LOOK REF (CK 2026-07-03) still b2d64f0f / clip 54d685bd
+    weather: rain
+    keyword: "Rain on Tent"
+    audio_hint: "rain drumming on the tent tarp + forest rain, camper POV"
+    audio_layers: [{el: rain_on_tent, gain: 1.0}, {el: rain_light, gain: 0.4}]
+    still_prompt: "a small tent pitched in a dark rainforest clearing during heavy night rain, the tent fully zipped closed against the weather, a soft warm light glowing gently through the wet solid fabric from a lantern inside, flickering faintly, nothing inside visible, rain streaking down through the frame and dripping off broad leaves, ferns and undergrowth swaying in the wind around the campsite, towering dark trees dissolving into mist above, deep blue-green night, the cozy feeling of being warm and dry while the storm carries on outside, {film_look}"
+    motion_prompt: "heavy rain falling in clearly visible streaks, the large ferns in the foreground swaying and nodding as raindrops strike them, water dripping steadily off the leaves, the soft lantern glow inside the tent flickering gently through the fabric, mist drifting slowly between the dark trees behind, {motion_principle}, no people"
+  - id: tent_stars_ridge                # APPROVED LOOK REF (CK 2026-07-03) still 887dd4dd / clip 3b79e06c — OPAQUE fabric took 3 rolls
+    weather: clear
+    keyword: "Night Camping Under the Stars"
+    audio_hint: "night crickets + gentle breeze + distant owl, vast quiet"
+    audio_layers: [{el: crickets, gain: 0.7}, {el: wind, gain: 0.25}]
+    still_prompt: "a small dome tent with its solid opaque rainfly fully closed, pitched on an open mountain ridge under a vast starry night sky with the milky way arching overhead, the thick canvas walls glowing a soft even warm amber from a light source hidden deep inside, the fabric completely solid so only a gentle diffuse warmth shows through, no interior detail, dark mountain silhouettes on the horizon with the last deep orange trace of sunset, wind-bent alpine shrubs and grass tufts around the campsite, the tent small against an enormous sky, {film_look}"
+    motion_prompt: "the warm glow inside the tent breathing and flickering gently through the solid fabric, the alpine shrubs and grass tufts around the campsite swaying in a light mountain breeze, stars twinkling faintly across the vast sky, the milky way steady, {motion_principle}, no people"
   - id: tent_rain                     # autumn rain on the canvas
     weather: rain
     keyword: "Heavy Rain on a Tent"

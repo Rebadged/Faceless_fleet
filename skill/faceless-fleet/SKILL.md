@@ -47,6 +47,12 @@ The pipeline is proven end to end (a 3-hour loop assembles from a short clip in 
 - **"like a fire dancing inside" renders literal flames** (a burning cabin). Say "windows glowing with soft warm amber light from deep inside". Campfire/fireplace scenes where fire IS the subject are the exception.
 - **Kling under-animates timid prompts.** "gentle/subtle/only-motion-is-X" → near-static clip (0.0% pixel change, twice). Motion prompts must be explicit and multi-element ("heavy rain in clearly visible streaks… reflections rippling… smoke drifting"). Serene water scenes especially need heavy-rain energy or they freeze.
 - **Loudness:** normalize each SFX element to −20 LUFS/TP−3 BEFORE mixing (raw Freesound files vary ~30 dB in crest); then measured two-pass loudnorm with verify-and-correct; leave ~1.5-4 dB codec headroom (AAC overshoots true peak on crackle/cricket transients — crickets by ~+4 dB).
+- **The Look (CK, 2026-07-03 — the brand, see BRANDING.md §The Look):** light = fire
+  always (doors closed, dim flickering fire glow in windows or cast on the ground, no
+  steady lamps; tents = opaque fabric, diffuse glow, nothing inside visible); fires burn
+  casual (low lazy flames over embers); wind lives here (one foreground element
+  NOTICEABLY moving, explicit multi-element motion wording); audio sourced wilderness-only
+  (rain on canopy/tarp/ground, never drains or pavement). Approved refs in channel configs.
 - **Brand framing (CK):** the stylized painterly look is owned as "handcrafted" in bios/descriptions ("scenes painted in our signature storybook style, soundscapes mixed by hand"). Anchor craft claims to curation/mixing; never explicitly deny AI.
 - **Coordination:** parallel instances split lanes (content vs channel setup); pull-rebase before every push to `main`.
 
