@@ -26,7 +26,10 @@ from pathlib import Path
 from .config import ROOT, load_channel, output_dirs
 from .schedule import next_publish_at
 
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+# upload = the job; readonly = lets the pipeline VERIFY which channel a token
+# belongs to (channels.list mine=true) before any upload touches it.
+SCOPES = ["https://www.googleapis.com/auth/youtube.upload",
+          "https://www.googleapis.com/auth/youtube.readonly"]
 SECRETS = ROOT / "secrets"
 RETRIABLE = {500, 502, 503, 504}
 
