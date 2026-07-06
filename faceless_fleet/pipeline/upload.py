@@ -31,7 +31,14 @@ SECRETS = ROOT / "secrets"
 RETRIABLE = {500, 502, 503, 504}
 
 
-def _client_secret_path() -> Path:
+def _client_secret_path(slug: str | None = None) -> Path:
+    """Per-channel client secret (secrets/client_secret_<slug>.json) with a shared
+    fallback (secrets/client_secret.json). Filenames are lowercase — the VPS is
+    case-sensitive."""
+    if slug:
+        p = SECRETS / f"client_secret_{slug}.json"
+        if p.exists():
+            return p
     return SECRETS / "client_secret.json"
 
 
@@ -62,7 +69,7 @@ def interactive_auth(slug: str, manual: bool = False,
         from urllib.parse import parse_qs, urlparse
 
         from google_auth_oauthlib.flow import Flow
-        flow = Flow.from_client_secrets_file(str(_client_secret_path()), SCOPES)
+        flow = Flow.from_client_secrets_file(str(_client_secret_path(slug)), SCOPES)
         flow.redirect_uri = "http://localhost"
         auth_url, _ = flow.authorization_url(prompt="consent", access_type="offline")
         print("\n1) On your phone, open this link and tap Approve:\n\n", auth_url, "\n")
@@ -74,7 +81,7 @@ def interactive_auth(slug: str, manual: bool = False,
         creds = flow.credentials
     else:
         from google_auth_oauthlib.flow import InstalledAppFlow
-        flow = InstalledAppFlow.from_client_secrets_file(str(_client_secret_path()), SCOPES)
+        flow = InstalledAppFlow.from_client_secrets_file(str(_client_secret_path(slug)), SCOPES)
         if redirect_host:
             creds = flow.run_local_server(
                 host="0.0.0.0", port=port, open_browser=False,
@@ -100,7 +107,8 @@ def _service(slug: str):
     refresh = os.environ.get(env_name)
     if not refresh:
         raise RuntimeError(f"Missing refresh token env var {env_name}. Run --auth first.")
-    secret = json.loads(_client_secret_path().read_text(encoding="utf-8-sig"))["installed"]
+    data = json.loads(_client_secret_path(slug).read_text(encoding="utf-8-sig"))
+    secret = data.get("installed") or data.get("web")
     creds = Credentials(
         token=None, refresh_token=refresh,
         token_uri=secret["token_uri"], client_id=secret["client_id"],
