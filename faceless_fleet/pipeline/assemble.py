@@ -284,6 +284,52 @@ def kenburns_from_still(still: Path, out: Path, cfg: dict, seconds: int) -> Path
     return out
 
 
+def loop_video_with_black_tail(unit: Path, out: Path, seconds: int, cfg: dict) -> Path:
+    """CK format decision (2026-07-12): the visual plays for the first N minutes, then a
+    gentle fade to black; the rest of the video is a black screen while the audio
+    continues. Serves sleepers: no glare, battery-friendly, matches the niche convention.
+    Composition (all segments share codec params so concat is stream-copy):
+      [visual: unit stream-looped to N min] + [fade: unit re-encoded with fade-out]
+      + [black: 60s black unit stream-looped for the remainder].
+    The seamless unit ends on its own start frame, so the fade segment (which starts at
+    the unit's start) continues the motion without a jump. Falls back to a plain loop
+    when disabled or when the target is shorter than visual+fade."""
+    a = cfg["assembly"]
+    bt = a.get("black_tail") or {}
+    vis_s = int(bt.get("visual_minutes", 15)) * 60
+    fade_s = float(bt.get("fade_seconds", 4))
+    if not bt.get("enabled") or seconds <= vis_s + fade_s + 60:
+        return loop_to_length(unit, out, seconds)
+
+    work = out.parent
+    fps = a.get("fps", 30)
+    # 1) visual head (lossless loop)
+    head = work / "_bt_head.mp4"
+    loop_to_length(unit, head, vis_s)
+    # 2) fade segment: first fade_s of the unit, fading to black (same encode params
+    #    as make_seamless_video so concat -c copy accepts it)
+    fade = work / "_bt_fade.mp4"
+    _run(["ffmpeg", "-y", "-i", str(unit), "-t", str(fade_s),
+          "-vf", f"fade=t=out:st=0:d={fade_s}",
+          "-r", str(fps), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "20",
+          "-an", str(fade)])
+    # 3) black unit (60s, encoded once) -> looped to the remainder
+    width, height = a.get("width", 1920), a.get("height", 1080)
+    black_unit = work / "_bt_black_unit.mp4"
+    _run(["ffmpeg", "-y", "-f", "lavfi", "-i",
+          f"color=c=black:s={width}x{height}:r={fps}", "-t", "60",
+          "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "20", str(black_unit)])
+    black = work / "_bt_black.mp4"
+    remainder = max(1, int(seconds - vis_s - fade_s))
+    loop_to_length(black_unit, black, remainder)
+    # 4) concat all three, stream copy
+    lst = work / "_bt_concat.txt"
+    lst.write_text("".join(f"file '{f.name}'\n" for f in (head, fade, black)))
+    _run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(lst),
+          "-c", "copy", str(out)])
+    return out
+
+
 def loop_to_length(clip: Path, out: Path, seconds: int) -> Path:
     """stream_loop the source clip up to `seconds` with no re-encode."""
     _run(["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(clip),
@@ -360,7 +406,7 @@ def assemble(slug: str, variant: str = "3h") -> Path:
     if seamless:
         base_clip = make_seamless_video(
             base_clip, work / "video_unit.mp4", a["loop_video_xfade_seconds"], a["fps"])
-    looped_v = loop_to_length(base_clip, work / "video_long.mp4", seconds)
+    looped_v = loop_video_with_black_tail(base_clip, work / "video_long.mp4", seconds, cfg)
 
     # --- audio base (seamless unit + loudness-normalized) ---
     # Prefer building the bed from reusable SFX elements at per-scene levels; fall

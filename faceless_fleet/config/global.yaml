@@ -77,6 +77,16 @@ assembly:
     opacity: 0.45                # 0..1; subtle so it reads as natural weather, not a filter
     blend: screen                # screen/lighten for white-on-black overlays
 
+  # BLACK-SCREEN TAIL (CK decision 2026-07-12): show the visual for the first N
+  # minutes, fade gently to black, and run black screen (audio continues) for the rest.
+  # Sleepers get no glare + battery savings; the visual hook still owns the browse page
+  # and the first minutes. Applies only when the target length exceeds visual+fade+60s,
+  # so review samples and Shorts are untouched.
+  black_tail:
+    enabled: true
+    visual_minutes: 15
+    fade_seconds: 4
+
 upload:
   # Anti-spam: drip-publish, never bulk-drop. publishAt gets per-video jitter.
   privacy_status: private        # flips public automatically at publishAt
