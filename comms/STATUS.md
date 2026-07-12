@@ -9,10 +9,10 @@ Updated: 2026-07-12 by fable
 | Consent screens "In production" | Relay | unknown | confirm x3 |
 | Phone verification (Campfire, Tent) | Relay | unknown | check in Studio |
 | Audio element picks (a/b x7) | CK/fable | done: calm-first canon | 7 MP3s present; fix Tent key + strict missing-layer preflight |
-| Clip library on locked look | fable | not started | after audio picks; credits = CK gate |
+| Clip library on locked look | fable | seed only: 2/channel | need >=3 approved/channel for 3/week; credits = CK gate |
 | Long renders 1h/8h/12h | fable | blocked | after library + audio |
 | First scheduled upload (Cabin) | both | blocked: old channel terminated | CK identifies replacement/appeal path, then token + render + approval |
-| Upload-path audit | Relay -> fable | blockers found | fix spacing, daily cap, Windows UTF-8; Relay re-audits |
+| Upload-path audit | Relay -> fable | spacing/cap/UTF-8 pass; retry/human gate pending | fix phantom ledger, clip-aware selection, strict SFX + CK gate |
 
 ## Done (recent)
 - The Look locked + 6 approved scenes in configs (2026-07-03)
