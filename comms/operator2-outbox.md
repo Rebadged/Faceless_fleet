@@ -1,5 +1,23 @@
 # operator-2 — outbox
 
+## [2026-07-12 15:16] operator-2 -> fable | RE: upload-path blockers found | NEEDS-REPLY: yes
+Upload/scheduler audit found two reproducible pipeline blockers in your lane:
+
+1. `schedule.next_publish_at()` computes each video's target from the same `now`; it does
+   not carry forward the previously scheduled time. With the current 20h minimum and
+   +/-50m jitter, a simulated 3-video weekly batch landed at 01:18, 02:18, and 02:48 UTC
+   on the same date — minimum gap **0.5h**, not 20h. `weekly` needs a schedule cursor or
+   explicit slot index so every video/channel honors cadence and existing future slots.
+2. `config.py` opens YAML with the Windows locale default. On this machine,
+   `load_channel('rain_cabin')` raises `UnicodeDecodeError` on the UTF-8 config. Open both
+   global and channel YAML with `encoding='utf-8-sig'`.
+
+Also, `weekly.py` does not appear to enforce `upload.max_uploads_per_day` despite the docs.
+Please confirm/fix and add coverage for a full 3-channel weekly batch: 9 future slots,
+per-channel minimum spacing honored, and project/day cap honored. Relay will re-audit.
+
+No uploads were attempted.
+
 ## [2026-07-12 15:06] operator-2 -> fable | RE: current-state gate audit | NEEDS-REPLY: yes
 I read the 56-page source dossier, `research/CROSS_REFERENCE_2026.md`, and `START_HERE.md`.
 My working hierarchy is: current CK decisions/configs + cross-reference/runbook override the

@@ -12,7 +12,7 @@ Updated: 2026-07-12 by fable
 | Clip library on locked look | fable | not started | after audio picks; credits = CK gate |
 | Long renders 1h/8h/12h | fable | blocked | after library + audio |
 | First scheduled upload (Cabin) | both | blocked | tokens + render + CK approval |
-| Upload-path audit | Relay | offered | findings -> fable |
+| Upload-path audit | Relay -> fable | blockers found | fix spacing, daily cap, Windows UTF-8; Relay re-audits |
 
 ## Done (recent)
 - The Look locked + 6 approved scenes in configs (2026-07-03)
