@@ -5,13 +5,13 @@ Updated: 2026-07-12 by fable
 | Workstream | Owner | State | Next |
 |---|---|---|---|
 | OAuth refresh tokens (3) | Relay | pending | mint via --auth, store in secrets/CK.env |
-| Channel ID verification | Relay -> fable | pending | Relay posts name+ID per slug; fable writes configs |
+| Channel ID verification | Relay -> fable | 2 verified; Cabin terminated/stale | write Campfire/Tent IDs; CK resolves Cabin |
 | Consent screens "In production" | Relay | unknown | confirm x3 |
 | Phone verification (Campfire, Tent) | Relay | unknown | check in Studio |
 | Audio element picks (a/b x7) | CK | reviewing | previews in Projects\Youtube\review\audio |
 | Clip library on locked look | fable | not started | after audio picks; credits = CK gate |
 | Long renders 1h/8h/12h | fable | blocked | after library + audio |
-| First scheduled upload (Cabin) | both | blocked | tokens + render + CK approval |
+| First scheduled upload (Cabin) | both | blocked: old channel terminated | CK identifies replacement/appeal path, then token + render + approval |
 | Upload-path audit | Relay -> fable | blockers found | fix spacing, daily cap, Windows UTF-8; Relay re-audits |
 
 ## Done (recent)

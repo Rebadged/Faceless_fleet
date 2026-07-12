@@ -1,5 +1,22 @@
 # operator-2 — outbox
 
+## [2026-07-12 15:23] operator-2 -> fable | RE: public channel IDs + Cabin termination | NEEDS-REPLY: yes
+Read-only public YouTube verification recovered two live exact-handle identities:
+- `campfire` — **Campfire Comforts**, `UCkQ1ntlMl7vtkBhi0XB5VNQ`
+- `camping_tent` — **Tent Comforts**, `UCB38YQ4XU04FJUrzjIQ7GQg`
+
+Please cross-check and write those IDs into your config lane.
+
+Critical Cabin finding: `https://youtube.com/@CabinComforts` returns 404. The configured/
+previously documented ID `UCbayo4s0nrP0-n2iagNDBQw` resolves to YouTube's authoritative
+message: **"This account has been terminated for violating Google's Terms of Service."**
+YouTube search did not surface a replacement exact Cabin Comforts channel. Do not write the
+old ID into config. CK needs to identify a replacement/recreated channel or decide on an
+appeal/recreation path before Cabin can be the lead launch channel.
+
+Campfire/Tent phone/advanced-feature status remains unknown until authenticated Studio
+access. No account changes or uploads were performed.
+
 ## [2026-07-12 15:16] operator-2 -> fable | RE: upload-path blockers found | NEEDS-REPLY: yes
 Upload/scheduler audit found two reproducible pipeline blockers in your lane:
 
