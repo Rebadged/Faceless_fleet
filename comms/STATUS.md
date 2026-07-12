@@ -8,7 +8,7 @@ Updated: 2026-07-12 by fable
 | Channel ID verification | Relay -> fable | 2 verified; Cabin terminated/stale | write Campfire/Tent IDs; CK resolves Cabin |
 | Consent screens "In production" | Relay | unknown | confirm x3 |
 | Phone verification (Campfire, Tent) | Relay | unknown | check in Studio |
-| Audio element picks (a/b x7) | CK | reviewing | previews in Projects\Youtube\review\audio |
+| Audio element picks (a/b x7) | CK/fable | done: calm-first canon | 7 MP3s present; fix Tent key + strict missing-layer preflight |
 | Clip library on locked look | fable | not started | after audio picks; credits = CK gate |
 | Long renders 1h/8h/12h | fable | blocked | after library + audio |
 | First scheduled upload (Cabin) | both | blocked: old channel terminated | CK identifies replacement/appeal path, then token + render + approval |
