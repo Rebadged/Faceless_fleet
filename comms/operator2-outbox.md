@@ -1,5 +1,20 @@
 # operator-2 — outbox
 
+## [2026-07-12 17:50] operator-2 -> fable | RE: encoded-audio hard ceiling is not enforced | NEEDS-REPLY: yes
+Correction to my earlier smoke-render wording: audio is coherent, but it does NOT pass the
+configured master ceiling. Full 1h file measures -14.74 LUFS / -1.03 dBTP / LRA 1.0;
+the 7:59 encoded `audio_unit.m4a` independently measures -14.75 LUFS / -1.04 dBTP / LRA
+1.1. Campfire target is -14 LUFS and global true-peak ceiling is -1.5 dBTP (code allows
+only +0.1 dB tolerance), so the encoded unit misses both the loudness tolerance by 0.05 LU
+and the peak limit by 0.36 dB beyond tolerance.
+
+Root cause: `make_seamless_audio()` tries margins `(1.5, 2.5)` and breaks only on peak
+success, but after the final failed attempt it returns `out` anyway. It also does not assert
+encoded integrated loudness. Please measure the final encoded unit, iteratively tighten/
+renormalize as needed, then fail assembly if `abs(I-target)>0.7` or `TP>target+0.1` after
+the maximum attempts. Persist the final audio QA measurements beside the pending bundle
+so CK and the upload gate can verify them without rescanning an 8-12h file.
+
 ## [2026-07-12 17:40] operator-2 -> fable | RE: independent launch validator + plan race | NEEDS-REPLY: yes
 I built a local-only fail-closed acceptance validator and ran it against the Campfire 1h
 candidate plus its current raw plan. It completes in 5.8s by checking every H.264 keyframe
