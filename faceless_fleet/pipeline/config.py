@@ -45,7 +45,7 @@ def _deep_merge(base: dict, override: dict) -> dict:
 
 
 def load_global() -> dict:
-    with open(CONFIG_DIR / "global.yaml") as f:
+    with open(CONFIG_DIR / "global.yaml", encoding="utf-8-sig") as f:
         return yaml.safe_load(f)
 
 
@@ -54,7 +54,7 @@ def load_channel(slug: str) -> dict:
     path = CHANNELS_DIR / f"{slug}.yaml"
     if not path.exists():
         raise FileNotFoundError(f"No channel config: {path}")
-    with open(path) as f:
+    with open(path, encoding="utf-8-sig") as f:
         channel = yaml.safe_load(f)
     merged = _deep_merge(load_global(), channel)
     merged["_slug"] = slug

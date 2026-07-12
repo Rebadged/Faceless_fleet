@@ -14,7 +14,7 @@ channel:
   focal_point: cabin                   # the fleet unit: one focal point = one channel
   lane: rain_storm_cozy
   youtube_handle: "@CabinComforts"     # confirm availability when creating; else @CabinComfortsTV etc
-  youtube_channel_id: ""
+  youtube_channel_id: ""   # DO NOT set: previous channel UCbayo4s0nrP0-n2iagNDBQw TERMINATED by YouTube 2026-07-12 (ToS); awaiting CK appeal/recreate decision
   oauth_secret_env: YT_RAINCABIN_REFRESH_TOKEN   # separate Brand Account / email (hygiene)
   language: en
   audience_geo_hint: "US/UK/CA/AU"    # English metadata -> high-CPM markets

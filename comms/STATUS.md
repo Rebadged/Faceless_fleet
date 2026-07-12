@@ -4,7 +4,7 @@ Updated: 2026-07-12 by fable
 ## Objective (CK): all 3 channels reach verified scheduled uploads
 | Workstream | Owner | State | Next |
 |---|---|---|---|
-| OAuth refresh tokens (3) | Relay | pending | mint via --auth, store in secrets/CK.env |
+| OAuth refresh tokens | Relay | pending (2 of 3 possible) | mint Campfire+Tent; Cabin blocked on channel decision |
 | Channel ID verification | Relay -> fable | 2 verified; Cabin terminated/stale | write Campfire/Tent IDs; CK resolves Cabin |
 | Consent screens "In production" | Relay | unknown | confirm x3 |
 | Phone verification (Campfire, Tent) | Relay | unknown | check in Studio |

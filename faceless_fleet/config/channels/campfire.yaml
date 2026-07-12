@@ -9,7 +9,7 @@ channel:
   focal_point: campfire
   lane: campfire_cozy
   youtube_handle: "@CampfireComforts"
-  youtube_channel_id: ""
+  youtube_channel_id: "UCkQ1ntlMl7vtkBhi0XB5VNQ"   # verified by Relay 2026-07-12 (public lookup)
   oauth_secret_env: YT_CAMPFIRE_REFRESH_TOKEN
   bio: "Cozy campfire ambience for sleep, study, and relaxation. Crackling fires under summer stars with crickets and frogs, gentle rain on the flames in autumn, and quiet snowy nights deep in the forest. Get comfortable and let the fire carry you off. Every ambience is handcrafted — scenes painted in our signature storybook style, soundscapes mixed by hand for deep, uninterrupted rest. New ambiences every week."
   language: en
