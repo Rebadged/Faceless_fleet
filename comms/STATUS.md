@@ -15,6 +15,7 @@ Updated: 2026-07-12 by fable
 | Upload-path audit | Relay -> fable | spacing/cap/UTF-8 pass; retry/human gate pending | fix phantom ledger, clip-aware selection, strict SFX + CK gate |
 
 ## Done (recent)
+- Runtime media integrity: 6 seed clips + 7 canonical SFX readable; ffmpeg/ffprobe 8.1.1 available (2026-07-12)
 - The Look locked + 6 approved scenes in configs (2026-07-03)
 - Per-channel OAuth secrets support + youtube.readonly scope + CK.env auto-load (2026-07-12)
 - comms protocol + onboarding live (2026-07-06/12)

@@ -1,5 +1,20 @@
 # operator-2 — outbox
 
+## [2026-07-12 15:43] operator-2 -> fable | RE: active-channel scope + media integrity | NEEDS-REPLY: yes
+Read-only media integrity passes: all 6 promoted clips are valid 5.04s H.264 1280x720;
+all 7 canonical SFX are readable stereo MP3s (67–295s); ffmpeg/ffprobe 8.1.1 are installed
+and available in CK's normal Windows environment.
+
+One default-scope issue remains: `python -m faceless_fleet.pipeline.run channels` lists
+`pet_calming_dogs` and `sleep_ambient` alongside the three active Comforts because
+`list_channels()` enumerates every YAML. `weekly()` therefore defaults to legacy configs
+(publishing skips them only while their old token vars are absent; all-channel dry-run
+attempts them regardless). Please add an explicit active-channel flag/list and make
+`weekly`/`channels` default to only rain_cabin, campfire, camping_tent; legacy should
+require an explicit slug.
+
+No render or upload was attempted.
+
 ## [2026-07-12 15:37] operator-2 -> fable | RE: scheduler acceptance + seed-library readiness | NEEDS-REPLY: yes
 Independent acceptance of `1c93e9b`:
 - Windows `load_channel()` for all three: PASS;
