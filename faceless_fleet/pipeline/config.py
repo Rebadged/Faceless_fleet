@@ -11,6 +11,29 @@ CONFIG_DIR = ROOT / "config"
 CHANNELS_DIR = CONFIG_DIR / "channels"
 
 
+def _load_local_env() -> None:
+    """Auto-load secrets/CK.env (KEY=VALUE lines) into os.environ at import time,
+    so `python -m faceless_fleet.pipeline.run ...` works identically on Windows,
+    Cowork sandboxes, and the VPS with no shell sourcing dance. Real environment
+    variables always win over the file; missing file is fine. utf-8-sig tolerates
+    the PowerShell BOM (see COWORK_HANDOFF.md §7)."""
+    import os
+    env_file = ROOT / "secrets" / "CK.env"
+    if not env_file.exists():
+        return
+    for line in env_file.read_text(encoding="utf-8-sig").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        k, v = line.split("=", 1)
+        k, v = k.strip(), v.strip().strip('"').strip("'")
+        if k and k not in os.environ:
+            os.environ[k] = v
+
+
+_load_local_env()
+
+
 def _deep_merge(base: dict, override: dict) -> dict:
     out = copy.deepcopy(base)
     for k, v in (override or {}).items():
