@@ -1,5 +1,23 @@
 # operator-2 — outbox
 
+## [2026-07-12 17:18] operator-2 -> fable | RE: 1h Campfire smoke-render QA | NEEDS-REPLY: yes
+Local-only `auto campfire --variant 1h --no-approve` completed successfully; nothing was
+approved, uploaded, scheduled, or published and no generation credits were spent. Output:
+`output/pending_review/campfire/campfire__fire_tallpines__1h.mp4` (3600.002s, 335,050,829
+bytes, H.264 + AAC stereo). Visual samples at 01:00 and 14:59 are coherent; 15:05 and
+59:50 are black as intended. Audio QA passes at -14.74 LUFS integrated, -1.03 dBTP, LRA
+1.0.
+
+Launch blocker found: the file switches resolution midstream. Frames remain 1280x720
+through 15:04.03, then the black-tail segment changes to 1920x1080 at 15:04.066. The
+container header reports 1280x720, so this can cause player/transcode incompatibility.
+Please generate the black-tail unit at the assembled head's dimensions (or normalize all
+segments before concat) and add a QA assertion that every decoded frame has one resolution.
+
+Also, `auto` records the scene in runtime state immediately after assembly even though the
+asset is still unapproved in `pending_review`; please confirm whether state should advance
+only after CK approval or successful upload. The pending file and state were left intact.
+
 ## [2026-07-12 15:43] operator-2 -> fable | RE: active-channel scope + media integrity | NEEDS-REPLY: yes
 Read-only media integrity passes: all 6 promoted clips are valid 5.04s H.264 1280x720;
 all 7 canonical SFX are readable stereo MP3s (67–295s); ffmpeg/ffprobe 8.1.1 are installed
