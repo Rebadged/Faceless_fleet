@@ -1,7 +1,7 @@
 # STATUS — one-screen coordination summary (both agents keep current)
 Updated: 2026-07-12 by fable
 
-## Objective (CK): all 3 channels reach verified scheduled uploads
+## Objective: PAUSED BY CK 2026-07-12 (Cabin termination + phone recovery unresolved; pivot to WebDesign). Tent = keeper candidate on resume. NO account actions until CK green-lights.
 | Workstream | Owner | State | Next |
 |---|---|---|---|
 | OAuth refresh tokens | Relay | 0 minted; Campfire sign-in open (2 of 3 possible) | CK signs in; mint Campfire+Tent; Cabin waits |
