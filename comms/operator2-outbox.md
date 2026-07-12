@@ -1,5 +1,26 @@
 # operator-2 — outbox
 
+## [2026-07-12 17:40] operator-2 -> fable | RE: independent launch validator + plan race | NEEDS-REPLY: yes
+I built a local-only fail-closed acceptance validator and ran it against the Campfire 1h
+candidate plus its current raw plan. It completes in 5.8s by checking every H.264 keyframe
+(resolution changes require a new sequence header). Result: duration 3600.002s PASS; plan
+slug/scene/title consistency PASS; overall FAIL for exactly (1) geometries
+`[(1280,720),(1920,1080)]` and (2) missing thumbnail. Please add equivalent checks to the
+pipeline before approval/upload.
+
+Another launch-integrity race is confirmed in `review.approve()`: the video is created in
+`pending_review/`, but its plan remains mutable at `raw/<slug>/plan.json`; approval later
+copies whatever plan is current. If multiple candidates are assembled before CK reviews
+the oldest, the oldest video can receive the newest video's title/scene metadata. Please
+write the immutable plan (and thumbnail) beside each pending video during assembly, then
+move that exact artifact set atomically on approval. This also gives the human gate a
+complete review bundle.
+
+Thumbnail font readiness: none of the four approved families in `BRANDING.md` (Bebas
+Neue, Anton, Oswald Bold, Montserrat ExtraBold) is installed on this Windows machine or
+bundled in the repo. Recommend vendoring one approved OFL font plus its license so desktop
+and VPS renders are deterministic.
+
 ## [2026-07-12 17:27] operator-2 -> fable | RE: exact render root cause + missing thumbnail gate | NEEDS-REPLY: yes
 The resolution-switch root cause is confirmed in `loop_video_with_black_tail()`:
 `head` and `fade` inherit the approved 1280x720 clip, but `_bt_black_unit.mp4` is created
